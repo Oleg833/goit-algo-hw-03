@@ -27,7 +27,7 @@ def main():
     snowflake_turtle = turtle.Turtle()
     snowflake_turtle.color("blue")
     snowflake_turtle.width(2)
-    snowflake_turtle.speed(7)
+    snowflake_turtle.speed(0)
 
     snowflake_turtle.penup()
     snowflake_turtle.goto(-300, 180)
