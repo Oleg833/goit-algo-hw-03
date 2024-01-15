@@ -27,13 +27,13 @@ def main():
     snowflake_turtle = turtle.Turtle()
     snowflake_turtle.color("blue")
     snowflake_turtle.width(2)
-    snowflake_turtle.speed(2)
+    snowflake_turtle.speed(7)
 
     snowflake_turtle.penup()
-    snowflake_turtle.goto(-150, 90)
+    snowflake_turtle.goto(-300, 180)
     snowflake_turtle.pendown()
 
-    draw_complete_snowflake(snowflake_turtle, recursion_level, 300)
+    draw_complete_snowflake(snowflake_turtle, recursion_level, 150*recursion_level)
 
     window.exitonclick()
 
