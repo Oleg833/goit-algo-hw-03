@@ -12,6 +12,12 @@ def copy_files(src_dir, dest_dir):
 
 
     for root, dirs, files in os.walk(src_dir):
+        for subdir in dirs:
+            src_subdir = os.path.join(root, subdir)
+            dest_subdir = os.path.join(dest_dir, os.path.relpath(src_subdir, src_dir))
+
+            copy_files(src_subdir, dest_subdir)
+
         for file in files:
             src_path = os.path.join(root, file)
 
