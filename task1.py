@@ -1,47 +1,47 @@
-import os
-import shutil
+from pathlib import Path
 import argparse
+import shutil
+
 
 def copy_files(src_dir, dest_dir):
-    if not os.path.exists(src_dir):
-        print(f"Помилка: Вихідна директорія {src_dir} не існує.")
-        return
+    src_path = Path(src_dir)
+    dest_path = Path(dest_dir)
     
-    if not os.path.exists(dest_dir):
-        os.makedirs(dest_dir)
+    if not src_path.exists() or not src_path.is_dir():
+        print(f"Директорія: {src_path} не існує або це щось інше.")
+        return
 
-
-    for root, dirs, files in os.walk(src_dir):
-        for subdir in dirs:
-            src_subdir = os.path.join(root, subdir)
-            dest_subdir = os.path.join(dest_dir, os.path.relpath(src_subdir, src_dir))
-
-            copy_files(src_subdir, dest_subdir)
-
-        for file in files:
-            src_path = os.path.join(root, file)
-
+    for element in src_path.iterdir():
+        if element.is_dir():
+            copy_files(element, dest_path)
+        else:
             try:
-                copy_file(src_path, dest_dir)
+                copy_file(element, dest_path)
             except Exception as e:
                 print(f"Помилка копіювання файлу {src_path}: {e}")
 
-def copy_file(src_path, dest_dir):
-    _, file_extension = os.path.splitext(src_path)
+def copy_file(src_path, dest_path):
+    file_extension = src_path.suffix.lstrip(".")
+    dest_subdir_path = dest_path / file_extension
 
-    subdir = os.path.join(dest_dir, file_extension[1:])
-    if not os.path.exists(subdir):
-        os.makedirs(subdir)
+    dest_subdir_path.mkdir(parents=True, exist_ok=True)   
 
-    shutil.copy2(src_path, os.path.join(subdir, os.path.basename(src_path)))
+    shutil.copy2(src_path, dest_subdir_path)
+        
 
-def main():
-    parser = argparse.ArgumentParser(description="Рекурсивно копіює файли та сортує їх за розширенням.")
+def parse_argv():
+    parser = argparse.ArgumentParser(description="Рекурсивно копіює файли за розширенням.")
     parser.add_argument("src_dir", help="Шлях до вихідної директорії")
     parser.add_argument("dest_dir", nargs="?", default="dist", help="Шлях до директорії призначення")
     args = parser.parse_args()
 
-    copy_files(args.src_dir, args.dest_dir)
+    return args.src_dir, args.dest_dir
+
+
+def main():
+    src_dir, dest_dir = parse_argv()
+    
+    copy_files(src_dir, dest_dir)
 
 if __name__ == "__main__":
     main()
