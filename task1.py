@@ -35,10 +35,16 @@ def parse_argv():
         description="Рекурсивно копіює файли за розширенням."
     )
     parser.add_argument(
-        "src_dir", nargs="?", default="Lib", help="Шлях до вихідної директорії"
+        "src_dir",
+        nargs="?",
+        default="Lib",
+        help="Шлях до вихідної директорії",
     )
     parser.add_argument(
-        "dest_dir", nargs="?", default="dist", help="Шлях до директорії призначення"
+        "dest_dir",
+        nargs="?",
+        default="dist",
+        help="Шлях до директорії призначення",
     )
     args = parser.parse_args()
 
